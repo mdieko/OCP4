@@ -535,18 +535,14 @@ por url https://console-openshift-console.apps.ocp4.lab.local
 user: kubeadmin
 pass: CDZCC-CRY6C-TSKbT-hdmJs
 
+### Documentación oficial
+[Automatización con ansible](https://github.com/RedHatOfficial/ocp4-vsphere-upi-automation)
 
-Para la automatizacion por ansible usar 
-https://github.com/RedHatOfficial/ocp4-vsphere-upi-automation
+[Download isos](https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/)
 
-Para bajar los isos:
-https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/
+[Download Install](https://cloud.redhat.com/openshift/install)
 
-Para bajar los paquetes
-https://cloud.redhat.com/openshift/install
-
-
-https://www.youtube.com/watch?v=d03xg2PKOPg&feature=youtu.be
+[Video de Instalación](https://www.youtube.com/watch?v=d03xg2PKOPg&feature=youtu.be)
 
 
 
