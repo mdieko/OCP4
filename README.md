@@ -10,6 +10,7 @@ En la misma vamos a tener DNS/DHCP/HAPROXY/WEB
                 ### Definimos las ips con sus respectivas macaddres para los nodos bootstrap, masters y workers
 -----------------------------------------------------------------
 ---
+```
 disk: vda
 helper:
   name: "helper"
@@ -52,6 +53,7 @@ workers:
 #  - name: "non-cluster-vm"
 #    ipaddr: "192.168.7.31"
 #    macaddr: "52:54:00:f4:2e:2e"
+```
 -----------------------------------------------------------------
 Corremos el playbook de ansible, el mismo instala bind (dns), dhcp, haproxy (lb) y httpd (webserver), y configura los mismos para la implementacion del cluster.
 [root@helper ~]# ansible-playbook -e @vars.yaml tasks/main.yml
