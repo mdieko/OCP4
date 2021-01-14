@@ -388,6 +388,7 @@ Creamos el directorio de instalacion
 [root@helper ~]# mkdir ocp
 
 Creamos el archivo install-config.yaml
+ ```
 [root@helper ~]# vim install-config.yaml
 ###########################################
 apiVersion: v1
@@ -415,20 +416,24 @@ fips: false
 pullSecret: '{"auths":{"cloud.opens -----------------------"}}}'
 sshKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDSGNnoBSKsCeJo7y/jRtKxIx6MQ45xjeGlAFW9Bus06+FywBLaTpfyqcysshBQ738jfui31+aVESiQeATx/UdjDCnD9anNkmmoOqfDd08lmNGA2nP58fgLKP5vmjdwG7NyGIsh2XIRIpklvsu1P+WFPjPyvGUPkAnNsov2j6BMfE4fkxhdRofnKt7d+9sogtIOyCWeE2KEy6ZmQ/bxab10uXvk6/5pmpc0luZG+sj/nk49DjwHThklKe8qbQKSKSfGZzcWYs52wa3NiH5mLo4VV9jYPQ7FhbcwqWwUJwMngLAd/2DU7cKkfGosODg9jquhG13EoPPic9gBcm1VMTQLznWu7S+Aw++h68FNeg9kPXMQD159+S7VrNrPp9jP58v3U229Q1T2PHnoNlmut1WvRU93VLVrb3mcPagQbOI8Y4n7IqYSpb8tg3MuLjDLyB1rZDdL5Yv1MnKjc+R6u/9XapJfuvvuwziTsUeRT4lbl149hnMffjxkTbeU4tSw+qTfjxaGtmtQXHDohnBUm0nbbYxuL30o3NLKDPW8M3ytNPNwxgTYUQlq7lOBLCwiWgPPyvqRzBEeyA/fG2aT7yZYCMLTA+O6R+5ISgDDqMYdmNlAQYQnfv61KU3at5prTHFEvtFwoHC3YnBkBDTpCAmFQzRLMfX+ghzjEy0Cglk+/w== root@helper'
 ###########################################
-
+ ```
 Copiamos el archivo al directorio de instalacion 
+ ```
 [root@helper ~]# cp install-config.yaml ocp
-
+ ```
 Creamos los manifiestos
+ ```
 [root@helper ~]# ./openshift-install create manifests --dir=ocp
-
+ ```
 Creamos los ignitions
+ ```
 [root@helper ~]# ./openshift-install create ignition-configs --dir=ocp
-
+ ```
 Copiamos los ignitions al web server
+ ```
 [root@helper ~]# cp ocp/*.ign /var/www/html/.
 [root@helper ~]# chmod 644 /var/www/html/*.ign
-
+ ```
 Creamos las Vms con los minimos requisitos
 
 Bootstrap (1)
@@ -451,29 +456,37 @@ Storage: 120 GB
 
 Booteamos montando el iso "rhcos-live.x86_64.iso"
 Una vez iniciado ejecutar
+ ```
 # sudo coreos-installer install --ignition-url=http://<helper>:8080/<bootstrap/master/worker>.ign /dev/sda --insecure-ignition
+ ```
 En nuestro caso
+ ```
 # sudo coreos-installer install --ignition-url=http://10.54.108.220:8080/bootstrap.ign /dev/sda --insecure-ignition
-Una vez terminada la instalacion esperar a que todos hayan terminado para realizar su reinicio.
+ ```
+ Una vez terminada la instalacion esperar a que todos hayan terminado para realizar su reinicio.
 
 Para ver el proceso de instalacion
 Nos legueamos al bootstrap 
+ ```
 [root@helper ~]# ssh -i ~/.ssh/ocp4 core@bootstrap.ocp4.lab.local
-
+ ```
 Luego en el bootstrap:
+ ```
 [core@bootstrap ~]$ journalctl -b -f -u release-image.service -u bootkube.service
-
+ ```
 En el helper ejecutar:
+ ```
 [root@helper ~]# ./openshift-install --dir=ocp wait-for bootstrap-complete --log-level=info
-
-
+ ```
+ ```
 # oc get csr -o json --kubeconfig=/home/install/ocp/auth/kubeconfig | jq -r '.items[] | select(.status == {}) | .metadata.name'
 csr-7dzvd
 csr-xq5vl
-
+ ```
+  ```
 # oc adm certificate approve csr-7dzvd  --kubeconfig=/home/install/ocp/auth/kubeconfig
 certificatesigningrequest.certificates.k8s.io/csr-7dzvd approved
-
+ ```
 # oc adm certificate approve csr-xq5vl  --kubeconfig=/home/install/ocp/auth/kubeconfig
 certificatesigningrequest.certificates.k8s.io/csr-xq5vl approved
 
@@ -487,8 +500,9 @@ certificatesigningrequest.certificates.k8s.io/csr-5j5rz approved
 # oc adm certificate approve csr-x4vvr --kubeconfig=/home/install/ocp/auth/kubeconfig
 certificatesigningrequest.certificates.k8s.io/csr-x4vvr approved
 
+ ```
 # ./openshift-install wait-for install-complete --dir=ocp  --log-level debug
-
+ ```
 La salida final es 
  minutes per instance)
 DEBUG Cluster is initialized
@@ -506,6 +520,7 @@ INFO Time elapsed: 18m44s
 
 
 Luego nos logueamos 
+```
 # export KUBECONFIG=ocp/auth/kubeconfig
 # oc get nodes
 NAME                     STATUS   ROLES    AGE    VERSION
@@ -514,7 +529,7 @@ master1.ocp4.lab.local   Ready    master   151m   v1.19.0+7070803
 master2.ocp4.lab.local   Ready    master   151m   v1.19.0+7070803
 worker0.ocp4.lab.local   Ready    worker   107m   v1.19.0+7070803
 worker1.ocp4.lab.local   Ready    worker   105m   v1.19.0+7070803
-
+```
 
 por url https://console-openshift-console.apps.ocp4.lab.local
 user: kubeadmin
