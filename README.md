@@ -61,9 +61,11 @@ workers:
 ```
 -----------------------------------------------------------------
 Corremos el playbook de ansible, el mismo instala bind (dns), dhcp, haproxy (lb) y httpd (webserver), y configura los mismos para la implementacion del cluster.
+ ```
 [root@helper ~]# ansible-playbook -e @vars.yaml tasks/main.yml
+ ```
 
-#######################################################################################################################
+ ```
 [root@helper ~]# cat /etc/named.conf
 -----------------------------------------------------------------
 //
@@ -139,7 +141,8 @@ zone "108.54.10.in-addr.arpa" IN {
 include "/etc/named.rfc1912.zones";
 include "/etc/named.root.key";
 -----------------------------------------------------------------
-
+  ```
+ ```
 [root@helper ~]# cat /var/named/zonefile.db
 -----------------------------------------------------------------
 $TTL 1W
@@ -193,7 +196,8 @@ _etcd-server-ssl._tcp   IN      SRV     0 10 2380 etcd-2.ocp4.lab.local.
 ;
 ;EOF
 -----------------------------------------------------------------
-
+  ```
+ ```
 [root@helper ~]# cat /var/named/reverse.db
 -----------------------------------------------------------------
 $TTL 1W
@@ -223,7 +227,9 @@ $TTL 1W
 ;EOF
 -----------------------------------------------------------------
 #######################################################################################################################
-
+  ```
+ 
+ ```
 [root@helper ~]# cat /etc/dhcp/dhcpd.conf
 #######################################################################################################################
 authoritative;
@@ -259,7 +265,8 @@ max-lease-time 14400;
         }
 }
 #######################################################################################################################
-
+  ```
+ ```
 [root@helper ~]# cat /etc/haproxy/haproxy.cfg
 #######################################################################################################################
 #---------------------------------------------------------------------
@@ -320,9 +327,9 @@ defaults
     timeout http-keep-alive 10s
     timeout check           10s
     maxconn                 3000
+ ```
 
-#---------------------------------------------------------------------
-
+ ```
 listen stats
     bind :9000
     mode http
@@ -374,19 +381,18 @@ backend ingress-https
     balance source
     server worker0-https-router0 10.54.108.224:443 check
     server worker1-https-router1 10.54.108.225:443 check
-
-#---------------------------------------------------------------------
-#######################################################################################################################
+ ```
 
 Bajamos los paquetes:(openshift-install-linux.tar.gz, openshift-client-linux.tar.gz, rhcos-live.x86_64.iso, pull-secret.txt)
-
+ ```
 [root@helper ~]# tar xzvf openshift-install-linux.tar.gz
 [root@helper ~]# tar xzvf openshift-client-linux.tar.gz
 [root@helper ~]# cp oc kubectl /usr/local/bin 
-
+ ```
 Creamos el directorio de instalacion
+ ```
 [root@helper ~]# mkdir ocp
-
+ ```
 Creamos el archivo install-config.yaml
  ```
 [root@helper ~]# vim install-config.yaml
@@ -435,7 +441,7 @@ Copiamos los ignitions al web server
 [root@helper ~]# chmod 644 /var/www/html/*.ign
  ```
 Creamos las Vms con los minimos requisitos
-
+ ```
 Bootstrap (1)
 SO: RHCOS
 CPUs: 4
@@ -453,7 +459,7 @@ SO: RHCOS or RHEL 7.6
 CPUs: 4
 MRam: 8 GB
 Storage: 120 GB
-
+ ```
 Booteamos montando el iso "rhcos-live.x86_64.iso"
 Una vez iniciado ejecutar
  ```
@@ -463,6 +469,7 @@ En nuestro caso
  ```
 # sudo coreos-installer install --ignition-url=http://10.54.108.220:8080/bootstrap.ign /dev/sda --insecure-ignition
  ```
+ 
  Una vez terminada la instalacion esperar a que todos hayan terminado para realizar su reinicio.
 
 Para ver el proceso de instalacion
@@ -487,19 +494,23 @@ csr-xq5vl
 # oc adm certificate approve csr-7dzvd  --kubeconfig=/home/install/ocp/auth/kubeconfig
 certificatesigningrequest.certificates.k8s.io/csr-7dzvd approved
  ```
+ ```
 # oc adm certificate approve csr-xq5vl  --kubeconfig=/home/install/ocp/auth/kubeconfig
 certificatesigningrequest.certificates.k8s.io/csr-xq5vl approved
-
+ ```
+  ```
 # oc get csr -o json --kubeconfig=/home/install/ocp/auth/kubeconfig  | jq -r '.items[] | select(.status == {}) | .metadata.name'
 csr-5j5rz
 csr-x4vvr
-
+ ```
+  ```
 # oc adm certificate approve csr-5j5rz --kubeconfig=/home/install/ocp/auth/kubeconfig
 certificatesigningrequest.certificates.k8s.io/csr-5j5rz approved
-
+ ```
+  ```
 # oc adm certificate approve csr-x4vvr --kubeconfig=/home/install/ocp/auth/kubeconfig
 certificatesigningrequest.certificates.k8s.io/csr-x4vvr approved
-
+ ```
  ```
 # ./openshift-install wait-for install-complete --dir=ocp  --log-level debug
  ```
@@ -531,7 +542,8 @@ worker0.ocp4.lab.local   Ready    worker   107m   v1.19.0+7070803
 worker1.ocp4.lab.local   Ready    worker   105m   v1.19.0+7070803
 ```
 
-por url https://console-openshift-console.apps.ocp4.lab.local
+### Acceso a la consola web
+url: https://console-openshift-console.apps.ocp4.lab.local
 user: kubeadmin
 pass: CDZCC-CRY6C-TSKbT-hdmJs
 
