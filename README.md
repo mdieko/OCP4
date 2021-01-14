@@ -545,9 +545,9 @@ worker1.ocp4.lab.local   Ready    worker   105m   v1.19.0+7070803
 ```
 
 ### Acceso a la consola web
-url: https://console-openshift-console.apps.ocp4.lab.local
-user: kubeadmin
-pass: CDZCC-CRY6C-TSKbT-hdmJs
+- url: https://console-openshift-console.apps.ocp4.lab.local
+- user: kubeadmin
+- pass: CDZCC-CRY6C-TSKbT-hdmJs
 
 ### Documentación oficial
 [Automatización con ansible](https://github.com/RedHatOfficial/ocp4-vsphere-upi-automation)
