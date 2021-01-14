@@ -8,9 +8,10 @@ En la misma vamos a tener DNS/DHCP/HAPROXY/WEB
 [root@helper ~]# cp docs/examples/vars.yaml .
 [root@helper ~]# vim vars.yaml 
  ```
- En el mismo definimos <clusteid><domain> En nuestro caso es ocp4.lab.local
- Definimos los parametros de dhcp
- Definimos las ips con sus respectivas macaddres para los nodos bootstrap, masters y workers
+ En el mismo definimos:
+ - <clusteid><domain> En nuestro caso es ocp4.lab.local
+ - Definimos los parametros de dhcp
+ - Definimos las ips con sus respectivas macaddres para los nodos bootstrap, masters y workers
 
 
 -----------------------------------------------------------------
@@ -514,7 +515,8 @@ certificatesigningrequest.certificates.k8s.io/csr-x4vvr approved
  ```
 # ./openshift-install wait-for install-complete --dir=ocp  --log-level debug
  ```
-La salida final es 
+La salida final es:
+ ```
  minutes per instance)
 DEBUG Cluster is initialized
 INFO Waiting up to 10m0s for the openshift-console route to be created...
@@ -528,7 +530,7 @@ INFO Login to the console with user: "kubeadmin", and password: "CDZCC-CRY6C-TSK
 DEBUG Time elapsed per stage:
 DEBUG Cluster Operators: 18m44s
 INFO Time elapsed: 18m44s
-
+ ```
 
 Luego nos logueamos 
 ```
