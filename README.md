@@ -1,4 +1,4 @@
-#Instalacion OCP 4.6 en Vmware con metodo Bare Metal
+# Instalacion OCP 4.6 en Vmware con metodo Bare Metal
 Crear Vm BASTION con Centos/RedHat 7
 En la misma vamos a tener DNS/DHCP/HAPROXY/WEB
 [root@helper ~]# yum -y install ansible git
