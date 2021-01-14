@@ -1,6 +1,7 @@
 # Instalacion OCP 4.6 en Vmware con metodo Bare Metal
-Crear Vm BASTION con Centos/RedHat 7
-En la misma vamos a tener DNS/DHCP/HAPROXY/WEB
+### Creación Vm BASTION (Centos/RedHat 7)
+### En la misma vamos a tener DNS/DHCP/HAPROXY/WEB
+ ```
 [root@helper ~]# yum -y install ansible git
 [root@helper ~]# git clone https://github.com/RedHatOfficial/ocp4-helpernode
 [root@helper ~]# cd ocp4-helpernode
@@ -8,6 +9,8 @@ En la misma vamos a tener DNS/DHCP/HAPROXY/WEB
 [root@helper ~]# vim vars.yaml ### En el mismo definimos <clusteid><domain> En nuestro caso es ocp4.lab.local
                 ### Definimos los parametros de dhcp
                 ### Definimos las ips con sus respectivas macaddres para los nodos bootstrap, masters y workers
+ ```
+
 -----------------------------------------------------------------
 ---
 ```
